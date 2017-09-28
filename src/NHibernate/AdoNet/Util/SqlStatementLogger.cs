@@ -10,6 +10,8 @@ namespace NHibernate.AdoNet.Util
 	{
 		private static readonly IInternalLogger Logger = LoggerProvider.LoggerFor("NHibernate.SQL");
 
+        //Modified by OneGeo: For Capturing SQLStatements with values.
+        public string SQLStatement { get; set; } = String.Empty;
 		/// <summary> Constructs a new SqlStatementLogger instance.</summary>
 		public SqlStatementLogger() : this(false, false)
 		{
@@ -45,20 +47,24 @@ namespace NHibernate.AdoNet.Util
 			}
 
 			style = DetermineActualStyle(style);
-			string statement = style.Formatter.Format(GetCommandLineWithParameters(command));
+            //Modified by OneGeo: Capturing formatted SQLStatements with values.
+            SQLStatement = style.Formatter.Format(GetCommandLineWithParameters(command));
 			string logMessage;
 			if (string.IsNullOrEmpty(message))
 			{
-				logMessage = statement;
+                //Modified by OneGeo: Capturing formatted SQLStatements with values.
+                logMessage = SQLStatement;
 			}
 			else
 			{
-				logMessage = message + statement;
+                //Modified by OneGeo: Capturing formatted SQLStatements with values.
+                logMessage = message + SQLStatement;
 			}
 			Logger.Debug(logMessage);
 			if (LogToStdout)
 			{
-				Console.Out.WriteLine("NHibernate: " + statement);
+                //Modified by OneGeo: Capturing formatted SQLStatements with values.
+                Console.Out.WriteLine("NHibernate: " + SQLStatement);
 			}
 		}
 

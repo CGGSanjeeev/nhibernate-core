@@ -2707,11 +2707,12 @@ namespace NHibernate.Persister.Entity
 			}
 			catch (DbException sqle)
 			{
+                //Modified by OneGeo: Capturing SQLStatements with values on exception.
 				var exceptionContext = new AdoExceptionContextInfo
 										{
 											SqlException = sqle,
 											Message = "could not insert: " + MessageHelper.InfoString(this, tableId),
-											Sql = sql.ToString(),
+											Sql = sql.ToString() + "\n\n" + sqle.Data["actual-sql-query"].ToString(),
 											EntityName = EntityName,
 											EntityId = tableId
 										};

@@ -183,6 +183,8 @@ namespace NHibernate
 		/// <returns> original or modified sql </returns>
 		SqlString OnPrepareStatement(SqlString sql);
 
+        //Modified by OneGeo: Capturing SQLStatements with values.
+		void OnPrepareSQLStatement(string sql);
 		#region NH specific
 
 		/// <summary>

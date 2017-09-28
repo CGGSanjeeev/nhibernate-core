@@ -102,5 +102,10 @@ namespace NHibernate
 		{
 			return sql;
 		}
+
+        //Modified by OneGeo: Capturing SQLStatements with values.
+		public void OnPrepareSQLStatement(string sql)
+		{
+		}
 	}
 }

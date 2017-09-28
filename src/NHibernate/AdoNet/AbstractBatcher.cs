@@ -114,7 +114,8 @@ namespace NHibernate.AdoNet
 			}
 			catch (InvalidOperationException ioe)
 			{
-				throw new ADOException("While preparing " + cmd.CommandText + " an error occurred", ioe);
+                //Modified by OneGeo: Concatnating formatted SQLStatements with thrown errors
+				throw new ADOException("While preparing " + _factory.Settings.SqlStatementLogger.SQLStatement + " an error occurred", ioe);
 			}
 		}
 
@@ -198,8 +199,9 @@ namespace NHibernate.AdoNet
 			}
 			catch (Exception e)
 			{
-				e.Data["actual-sql-query"] = cmd.CommandText;
-				Log.Error("Could not execute command: " + cmd.CommandText, e);
+                //Modified by OneGeo: Concatnating formatted SQLStatements with thrown errors.
+				e.Data["actual-sql-query"] = _factory.Settings.SqlStatementLogger.SQLStatement;
+				Log.Error("Could not execute command: " + _factory.Settings.SqlStatementLogger.SQLStatement, e);
 				throw;
 			}
 			finally
@@ -224,8 +226,9 @@ namespace NHibernate.AdoNet
 			}
 			catch (Exception e)
 			{
-				e.Data["actual-sql-query"] = cmd.CommandText;
-				Log.Error("Could not execute query: " + cmd.CommandText, e);
+                //Modified by OneGeo: Concatnating formatted SQLStatements with thrown errors
+				e.Data["actual-sql-query"] = _factory.Settings.SqlStatementLogger.SQLStatement;
+				Log.Error("Could not execute query: " + _factory.Settings.SqlStatementLogger.SQLStatement, e);
 				throw;
 			}
 			finally
@@ -474,6 +477,8 @@ namespace NHibernate.AdoNet
 		protected void LogCommand(DbCommand command)
 		{
 			_factory.Settings.SqlStatementLogger.LogCommand(command, FormatStyle.Basic);
+            //Modified by OneGeo: Capturing formatted SQLStatements with values.
+			_interceptor.OnPrepareSQLStatement(_factory.Settings.SqlStatementLogger.SQLStatement);
 		}
 
 		private void LogOpenPreparedCommand()
