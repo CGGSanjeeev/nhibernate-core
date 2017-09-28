@@ -135,6 +135,9 @@ namespace NHibernate.Driver
 					((IDbDataParameter) dbParam).Scale = MaxScale;
 					break;
 				case DbType.String:
+                    //Modified by OneGeo: String handling, virtually restricting proper length string value
+					dbParam.Size = MaxSizeForClob;
+					break;
 				case DbType.StringFixedLength:
 					dbParam.Size = IsText(dbParam, sqlType) ? MaxSizeForClob : MaxSizeForLengthLimitedString;
 					break;
