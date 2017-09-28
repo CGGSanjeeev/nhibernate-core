@@ -284,7 +284,8 @@ namespace NHibernate.Tuple.Entity
 				if (!isAbstract && persistentClass.HasPocoRepresentation
 				    && ReflectHelper.IsAbstractClass(persistentClass.MappedClass))
 				{
-					log.Warn("entity [" + type.FullName
+                    //Modified by OneGeo: Concating the type without the null
+					log.Warn("entity [" + (type == null? persistentClass.EntityName : type.FullName)
 					         + "] is abstract-class/interface explicitly mapped as non-abstract; be sure to supply entity-names");
 				}
 			}
@@ -302,7 +303,8 @@ namespace NHibernate.Tuple.Entity
 			optimisticLockMode = persistentClass.OptimisticLockMode;
 			if (optimisticLockMode > Versioning.OptimisticLock.Version && !dynamicUpdate)
 			{
-				throw new MappingException("optimistic-lock setting requires dynamic-update=\"true\": " + type.FullName);
+                //Modified by OneGeo: Concating the type without the null
+				throw new MappingException("optimistic-lock setting requires dynamic-update=\"true\": " + (type == null ? persistentClass.EntityName : type.FullName));
 			}
 
 			hasCollections = foundCollection;
